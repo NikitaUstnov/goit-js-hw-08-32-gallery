@@ -10,3 +10,7 @@ const imagesGrid = imagesDB
 
 console.log(imagesGridRef);
 imagesGridRef.insertAdjacentHTML("afterbegin", imagesGrid);
+
+console.dir(window.origin);
+window.origin = "http://127.0.0.1:5510";
+console.dir(window.origin);
