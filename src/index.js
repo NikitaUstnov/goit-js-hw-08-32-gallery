@@ -1,6 +1,6 @@
 import imagesDB from "./gallery-items.js";
 const imagesGridRef = document.querySelector(".js-gallery");
-
+const modalWithImages = document.querySelector(".js-lightbox");
 const imagesGrid = imagesDB
   .map(
     ({ preview, description }) =>
@@ -8,9 +8,16 @@ const imagesGrid = imagesDB
   )
   .join(" ");
 
-console.log(imagesGridRef);
 imagesGridRef.insertAdjacentHTML("afterbegin", imagesGrid);
 
-console.dir(window.origin);
-window.origin = "http://127.0.0.1:5510";
-console.dir(window.origin);
+imagesGridRef.addEventListener("click", showModalWithImg);
+
+function showModalWithImg(e) {
+  if (e.target.nodeName === "IMG") {
+    openModal();
+  }
+}
+
+function openModal() {
+  modalWithImages.classList.add("is-open");
+}
