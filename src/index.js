@@ -35,10 +35,15 @@ modalWithImages.addEventListener("click", closeModal);
 function closeModal() {
   modalWithImages.classList.remove("is-open");
   fullscreenImg.src = "";
-}
 
-modalWithImages.addEventListener("keydown", closeModalOnEscButton);
-
-function closeModalOnEscButton(e) {
-  console.log(e.key);
+  if (modalWithImages) {
+    modalWithImages.addEventListener("keydown", (e) => {
+      const escKey = e.keyCode;
+      console.log(escKey);
+      if (escKey === 27) {
+        modalWithImages.classList.remove("is-open");
+        fullscreenImg.src = "";
+      }
+    });
+  }
 }
