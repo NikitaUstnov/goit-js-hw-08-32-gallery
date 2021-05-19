@@ -2,6 +2,11 @@ import imagesDB from "./gallery-items.js";
 const imagesGridRef = document.querySelector(".js-gallery");
 const modalWithImages = document.querySelector(".js-lightbox");
 const fullscreenImg = document.querySelector(".lightbox__image");
+const overlayEl = document.querySelector(".lightbox__overlay");
+// const imageContainerEl = document.querySelector(".lightbox__content");
+const closeModalBtnEl = document.querySelector(
+  '[data-action="close-lightbox"]'
+);
 
 const imagesGrid = ({ preview, description, original }) => {
   const galleryItems = document.createElement("li");
@@ -31,19 +36,27 @@ function showModalWithImg(e) {
   fullscreenImg.src = e.target.dataset.fullscreen;
 }
 
-modalWithImages.addEventListener("click", closeModal);
-function closeModal() {
+closeModalBtnEl.addEventListener("click", closeModalOnBtnClick);
+function closeModalOnBtnClick() {
   modalWithImages.classList.remove("is-open");
   fullscreenImg.src = "";
-
-  if (modalWithImages) {
-    modalWithImages.addEventListener("keydown", (e) => {
-      const escKey = e.keyCode;
-      console.log(escKey);
-      if (escKey === 27) {
-        modalWithImages.classList.remove("is-open");
-        fullscreenImg.src = "";
-      }
-    });
-  }
 }
+
+overlayEl.addEventListener("click", closeModalOnOwerlayClick);
+
+function closeModalOnOwerlayClick(e) {
+  console.log(e.currentTarget);
+  if (e.target.nodeName === "IMG") {
+    return;
+  }
+  modalWithImages.classList.remove("is-open");
+}
+
+document.addEventListener("keydown", (e) => {
+  if (modalWithImages.classList.contains("is-open")) {
+    if (e.keyCode === 27) {
+      modalWithImages.classList.remove("is-open");
+      fullscreenImg.src = "";
+    }
+  }
+});
