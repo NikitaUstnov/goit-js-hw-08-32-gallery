@@ -1,13 +1,7 @@
 import imagesDB from "./gallery-items.js";
-const imagesGridRef = document.querySelector(".js-gallery");
-const modalWithImages = document.querySelector(".js-lightbox");
-const fullscreenImg = document.querySelector(".lightbox__image");
-const overlayEl = document.querySelector(".lightbox__overlay");
-// const imageContainerEl = document.querySelector(".lightbox__content");
-const closeModalBtnEl = document.querySelector(
-  '[data-action="close-lightbox"]'
-);
+import refs from "./refs.js";
 
+// render gallery
 const imagesGrid = ({ preview, description, original }) => {
   const galleryItems = document.createElement("li");
 
@@ -15,6 +9,7 @@ const imagesGrid = ({ preview, description, original }) => {
 
   galleryImgItem.src = preview;
   galleryImgItem.alt = description;
+  galleryImgItem.classList.add("gallery__image");
   galleryImgItem.setAttribute("data-fullscreen", original);
 
   galleryItems.appendChild(galleryImgItem);
@@ -23,40 +18,61 @@ const imagesGrid = ({ preview, description, original }) => {
 };
 
 const renderGallery = imagesDB.map(imagesGrid);
-imagesGridRef.append(...renderGallery);
+refs.imagesGridRef.append(...renderGallery);
 
-imagesGridRef.addEventListener("click", showModalWithImg);
+// open modal
 
-function showModalWithImg(e) {
+refs.imagesGridRef.addEventListener("click", (e) => {
   if (e.target.nodeName !== "IMG") {
     return;
   }
 
-  modalWithImages.classList.add("is-open");
-  fullscreenImg.src = e.target.dataset.fullscreen;
-}
+  refs.modalWithImages.classList.add("is-open");
+  refs.fullscreenImg.src = e.target.dataset.fullscreen;
+});
 
-closeModalBtnEl.addEventListener("click", closeModalOnBtnClick);
-function closeModalOnBtnClick() {
-  modalWithImages.classList.remove("is-open");
-  fullscreenImg.src = "";
-}
+// close modal on button click
 
-overlayEl.addEventListener("click", closeModalOnOwerlayClick);
+refs.closeModalBtnEl.addEventListener("click", () => {
+  refs.modalWithImages.classList.remove("is-open");
+  refs.fullscreenImg.src = "";
+});
 
-function closeModalOnOwerlayClick(e) {
-  console.log(e.currentTarget);
+// close modal on overlay click
+
+refs.overlayEl.addEventListener("click", (e) => {
   if (e.target.nodeName === "IMG") {
     return;
   }
-  modalWithImages.classList.remove("is-open");
-}
+  refs.modalWithImages.classList.remove("is-open");
+  refs.fullscreenImg.src = "";
+});
+
+// close modal on Escape key press
 
 document.addEventListener("keydown", (e) => {
-  if (modalWithImages.classList.contains("is-open")) {
+  if (refs.modalWithImages.classList.contains("is-open")) {
     if (e.keyCode === 27) {
-      modalWithImages.classList.remove("is-open");
-      fullscreenImg.src = "";
+      refs.modalWithImages.classList.remove("is-open");
+      refs.fullscreenImg.src = "";
     }
   }
+});
+
+// image swicher in modal window
+
+refs.imagesGridRef.addEventListener("click", (e) => {
+  let currentElementIndex = renderGallery.indexOf(e.target.parentNode);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.keyCode === 39 && currentElementIndex < renderGallery.length - 1) {
+      currentElementIndex += 1;
+    }
+    if (e.keyCode === 37 && currentElementIndex > 0) {
+      currentElementIndex -= 1;
+    }
+
+    refs.fullscreenImg.src =
+      renderGallery[currentElementIndex].firstChild.dataset.fullscreen;
+  });
 });
