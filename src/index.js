@@ -21,8 +21,9 @@ const renderGallery = imagesDB.map(imagesGrid);
 refs.imagesGridRef.append(...renderGallery);
 
 // open modal
-
 refs.imagesGridRef.addEventListener("click", (e) => {
+  window.addEventListener("keydown", closeModalOnEscapeKeyPress);
+
   if (e.target.nodeName !== "IMG") {
     return;
   }
@@ -32,39 +33,32 @@ refs.imagesGridRef.addEventListener("click", (e) => {
 });
 
 // close modal on button click
-
-refs.closeModalBtnEl.addEventListener("click", () => {
-  refs.modalWithImages.classList.remove("is-open");
-  refs.fullscreenImg.src = "";
-});
+refs.closeModalBtnEl.addEventListener("click", clearData);
 
 // close modal on overlay click
-
-refs.overlayEl.addEventListener("click", (e) => {
-  if (e.target.nodeName === "IMG") {
-    return;
-  }
-  refs.modalWithImages.classList.remove("is-open");
-  refs.fullscreenImg.src = "";
-});
+refs.overlayEl.addEventListener("click", clearData);
 
 // close modal on Escape key press
-
-document.addEventListener("keydown", (e) => {
-  if (refs.modalWithImages.classList.contains("is-open")) {
-    if (e.keyCode === 27) {
-      refs.modalWithImages.classList.remove("is-open");
-      refs.fullscreenImg.src = "";
-    }
+function closeModalOnEscapeKeyPress(e) {
+  if (e.keyCode !== 27) {
+    return;
   }
-});
+  clearData();
+}
+
+// clear data when modal close
+function clearData() {
+  window.removeEventListener("keydown", closeModalOnEscapeKeyPress);
+  refs.fullscreenImg.src = "";
+  refs.modalWithImages.classList.remove("is-open");
+}
 
 // image swicher in modal window
 
 refs.imagesGridRef.addEventListener("click", (e) => {
   let currentElementIndex = renderGallery.indexOf(e.target.parentNode);
 
-  document.addEventListener("keydown", (e) => {
+  window.addEventListener("keydown", (e) => {
     if (e.keyCode === 39 && currentElementIndex < renderGallery.length - 1) {
       currentElementIndex += 1;
     }
