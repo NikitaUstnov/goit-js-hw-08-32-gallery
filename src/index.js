@@ -55,7 +55,6 @@ function clearData() {
 }
 
 // image swicher in modal window
-
 function imageSwicher(e) {
   let currentElementIndex = renderGallery.indexOf(e.currentTarget.parentNode);
 
@@ -71,19 +70,3 @@ function imageSwicher(e) {
       renderGallery[currentElementIndex].firstChild.dataset.fullscreen;
   });
 }
-
-// refs.imagesGridRef.addEventListener("click", (e) => {
-//   let currentElementIndex = renderGallery.indexOf(e.target.parentNode);
-
-//   window.addEventListener("keydown", (e) => {
-//     if (e.keyCode === 39 && currentElementIndex < renderGallery.length - 1) {
-//       currentElementIndex += 1;
-//     }
-//     if (e.keyCode === 37 && currentElementIndex > 0) {
-//       currentElementIndex -= 1;
-//     }
-
-//     refs.fullscreenImg.src =
-//       renderGallery[currentElementIndex].firstChild.dataset.fullscreen;
-//   });
-// });
